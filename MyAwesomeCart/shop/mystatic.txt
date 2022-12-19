@@ -1,0 +1,1 @@
+this my shop static file
