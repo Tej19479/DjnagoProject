@@ -5,6 +5,7 @@ from django.shortcuts import render
 from .models import Role, Department, Employee
 from datetime import datetime
 from django.db.models import Q
+import math
 
 
 # Create your views here.
@@ -84,7 +85,56 @@ def filter_emp(request):
             'emps': emps
         }
         return render(request, 'employeemangaemangent/all_employee.html', context)
-    elif request.method=="GET":
+    elif request.method == "GET":
         return render(request, 'employeemangaemangent/filter_employee.html')
     else:
         return HttpResponse("AN occureed")
+
+
+def amzotionchart(request):
+    ''' print("Enter an amount to borrow")
+    p = input()
+    print("Enter an annual interest rate as a decimal value")
+    r = input()
+    print("Enter a loan lenght in years")
+    t = input()
+
+    p = float(p)
+    r = float(r)
+    t = float(t)'''
+    p = 10000
+    r = 5
+    t = 3
+    r = (r / 100) / 12
+
+    # m = (p * r * pow(1 + r, t)) / (pow(1 + r, t) - 1)
+
+    m = (p * (r / 12) * (math.pow(1 + r / 12, 12 * t))) / (math.pow(1 + r / 12, 12 + t) - 1)
+    print("Your payment will be: Rupiya" + str(m))
+    print("Month\tStartingBalance\tInterestRate\tInterestCharge\tPayment\tEndingBalance")
+
+    month = 12 * t
+    month = int(month)
+    startingBalance = p
+    endingBalance = p
+    months = []
+    print("months", months)
+    for i in range(1, month + 1):
+        interestCharge = r / 12 * startingBalance
+        endingBalance = startingBalance + interestCharge - m
+        months.append(
+            [i, "₹ " + str(round(startingBalance, 2)), "₹ " + str(round(interestCharge, 2)), "₹ " + str(round(m, 2)),
+             "₹ " + str(round(endingBalance, 2))])
+
+        '''print(
+            str(i) + "\t\t$" + str(round(startingBalance, 2)) + "\t\t$" + str(round(interestCharge, 2)) + "\t\t$" + str(
+                round(m, 2)) + "\t\t$" + str(round(endingBalance, 2)))'''
+        ''' months=i
+        startingBalances=str(round(startingBalance, 2))
+        interestscharges=str(round(interestCharge, 2))
+        emimothnly=str(round(m, 2))
+        endingbalances=str(round(endingBalance, 2))'''
+        startingBalance = endingBalance
+    print(months)
+    context = {'months': months}
+    return render(request, 'employeemangaemangent/emi.html', context)
