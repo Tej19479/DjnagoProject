@@ -18,11 +18,14 @@ def home(request):
 
 
 def contact(request):
-    query = 'select * from tbl1'
+    name = "1";
+    #  query = "select * from tbl1 where name='" + name + "'";
+    query = "select email from contact where id="+'"{}"'.format(name)
+    #query = "select email from tbl1 where name=%s", [name]
+    #print('query', query)
     cursor.execute(query)
-
-    for x in cursor:
-        print(x)
+    result = cursor.fetchall()
+    print("result", result)
 
     return render(request, 'newproject/contact.html')
 
